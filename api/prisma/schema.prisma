@@ -13,11 +13,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User{
+  @@map("users")
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String
+  password String
+  cratedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  daily_meal_plan DailyMealPlan[]
+}
+
+
+model DailyMealPlan {
+  @@map("daily_meal_plan")
+  id Int @id @default(autoincrement())
+  order Int
+  date DateTime @db.Date
+  user_id Int
+  category_id Int
+  nutrition_id Int
+  user User @relation(fields: [user_id],references: [id])
+  category Category @relation(fields: [category_id] , references: [id])
+  nutrition Nutrition @relation(fields: [nutrition_id], references: [id])
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+  daily_meal_plan DailyMealPlan[]
+}
+
 model Nutrition {
   id                        Int      @id @default(autoincrement())
   @@map("nutritions")
   code String
   name String
+  daily_meal_plan DailyMealPlan[]
   energy_kj                 Decimal? @db.Decimal(10,2)
   energy_kcal               Decimal? @db.Decimal(10,2)
   water                     Decimal? @db.Decimal(10,2)

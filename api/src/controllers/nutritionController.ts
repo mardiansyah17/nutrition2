@@ -13,7 +13,7 @@ const findAll: RequestHandler = async (req, res) => {
           },
         },
       })
-      .withPages({ limit: 10, page: parseInt(page) });
+      .withPages({ limit: 10, page: parseInt(page), user: req });
     setTimeout(() => {
       return res.json({
         data: nutritions[0],
@@ -45,4 +45,5 @@ const findOne: RequestHandler = async (req, res) => {
     console.log(error);
   }
 };
+
 export { findAll, findOne };

@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import dataNutritions from "../data/nutritions.json";
 import db from "../src/utils/prisma";
+import bcrypt from "bcrypt";
 
 // Fungsi untuk membersihkan dan menyesuaikan data JSON
 const cleanData = (data: any) => {
@@ -36,6 +36,26 @@ const cleanData = (data: any) => {
 
 async function main() {
   // return await prisma.nutrition.deleteMany();
+  await db.category.createMany({
+    data: [
+      {
+        name: "Sarapan",
+      },
+      {
+        name: "Makan siang",
+      },
+      {
+        name: "Makan malam",
+      },
+    ],
+  });
+  await db.user.create({
+    data: {
+      email: "mardi@gmail.com",
+      name: "mardi",
+      password: bcrypt.hashSync("password", 10),
+    },
+  });
   const cleanedData = cleanData(dataNutritions);
   await db.nutrition.createMany({
     data: cleanedData,

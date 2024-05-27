@@ -31,7 +31,7 @@ class Features extends StatelessWidget {
           child: const FeatureItem(
             icon: Icons.calendar_month,
             title: "Rencana sehat",
-            routeName: "/plan",
+            routeName: "/plan-calendar",
           ),
         ),
         SizedBox(

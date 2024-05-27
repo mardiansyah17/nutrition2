@@ -3,6 +3,7 @@ import 'package:get/route_manager.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nutrition/constans/colors.dart';
 import 'package:nutrition/models/nutrition.dart';
+import 'package:nutrition/services/daily_plan_service.dart';
 import 'package:nutrition/services/nutrition_service.dart';
 import 'package:nutrition/widgets/chart_nutrition.dart';
 import 'package:nutrition/widgets/layout.dart';
@@ -18,6 +19,8 @@ class DetailNutrition extends StatefulWidget {
 
 class _DetailNutritionState extends State<DetailNutrition> {
   var id = Get.arguments["id"];
+  var category = Get.arguments?["category"];
+  DateTime dateTime = Get.arguments?["dateTime"];
   bool loading = true;
   DataNutrition? nutrition;
 
@@ -40,7 +43,18 @@ class _DetailNutritionState extends State<DetailNutrition> {
   Widget build(BuildContext context) {
     return Layout(
       title: const Text("Kandungan nutrisi"),
-      actions: [IconButton(onPressed: () => {}, icon: Icon(Icons.check))],
+      actions: [
+        IconButton(
+            onPressed: () async => {
+                  await DailyPlanService.createDailyPlan(
+                      category, id, dateTime),
+                  Get.offAllNamed('/daily-plan', arguments: {
+                    "datetime": dateTime,
+                    "message": "Berhasil menambahkan rencana"
+                  })
+                },
+            icon: Icon(Icons.check))
+      ],
       body: SingleChildScrollView(
         child: loading || nutrition == null
             ? Center(

@@ -27,6 +27,7 @@ class _SearchNutritionState extends State<SearchNutrition> {
   final TextEditingController _searchController = TextEditingController();
   bool showAddBtn = Get.arguments?['showAddBtn'] ?? false;
   int category = Get.arguments?['category'];
+  DateTime dateTime = Get.arguments?['date'];
 
   @override
   void initState() {
@@ -105,6 +106,7 @@ class _SearchNutritionState extends State<SearchNutrition> {
                               "id": item.id,
                               "showAddBtn": showAddBtn,
                               "category": category,
+                              "dateTime": dateTime
                             });
                           },
                           child: Container(

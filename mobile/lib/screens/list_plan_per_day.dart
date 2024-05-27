@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:nutrition/constans/colors.dart';
@@ -17,17 +19,37 @@ class ListPlanPerDay extends StatefulWidget {
 
 class _ListPlanPerDayState extends State<ListPlanPerDay> {
   final DateTime _dateTime = Get.arguments?["datetime"];
+  String? message = Get.arguments?["message"];
   DailyPlan? dailyPlan;
   bool isLoading = true;
   @override
   void initState() {
+    fetchPlan();
+    if (message != null) {
+      Fluttertoast.showToast(
+          msg: message!,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: primary,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+    super.initState();
+  }
+
+  void fetchPlan() {
     DailyPlanService.getDailyPlan(date: _dateTime).then((val) => {
           setState(() {
             dailyPlan = val;
             isLoading = false;
           })
         });
-    super.initState();
+  }
+
+  void deletePlanHandler(int id) async {
+    await DailyPlanService.deletePlanItem(id);
+    fetchPlan();
   }
 
   @override
@@ -40,13 +62,16 @@ class _ListPlanPerDayState extends State<ListPlanPerDay> {
           : Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView.builder(
-                  itemCount: dailyPlan?.plans.length ?? 0,
+                  itemCount: dailyPlan?.categories.length ?? 0,
                   itemBuilder: (ctx, i) {
-                    final plan = dailyPlan!.plans[i];
+                    final category = dailyPlan!.categories[i];
                     return DailyPlanList(
-                        title: plan.name,
-                        category: plan.id,
-                        nutritions: plan.nutritions);
+                      title: category.name,
+                      category: category.id,
+                      plans: category.plans,
+                      dateTime: _dateTime,
+                      onDeleteItemPlan: deletePlanHandler,
+                    );
                   }),
             ),
     );
@@ -56,12 +81,16 @@ class _ListPlanPerDayState extends State<ListPlanPerDay> {
 class DailyPlanList extends StatelessWidget {
   final String title;
   final int category;
-  final List<DataNutrition> nutritions;
+  final List<Plan> plans;
+  final Function onDeleteItemPlan;
+  final DateTime dateTime;
   const DailyPlanList(
       {super.key,
       required this.title,
       required this.category,
-      required this.nutritions});
+      required this.plans,
+      required this.onDeleteItemPlan,
+      required this.dateTime});
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +104,11 @@ class DailyPlanList extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             GestureDetector(
-              onTap: () => Get.toNamed('/search-nutrition',
-                  arguments: {"showAddBtn": true, "category": category}),
+              onTap: () => Get.toNamed('/search-nutrition', arguments: {
+                "showAddBtn": true,
+                "category": category,
+                "date": dateTime
+              }),
               child: Text(
                 "Tambah",
                 style: TextStyle(color: primary),
@@ -90,34 +122,71 @@ class DailyPlanList extends StatelessWidget {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: nutritions.length,
+          itemCount: plans.length,
           itemBuilder: (ctx, i) {
-            final nutrition = nutritions[i];
-            return Container(
-              margin: EdgeInsets.only(bottom: 15),
-              padding: EdgeInsets.all(12),
-              height: 60,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xFF000000).withOpacity(0.1),
-                      offset: Offset(1, 0),
-                      blurRadius: 15,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                  gradient: LinearGradient(
-                      stops: [0.02, 0.02], colors: [primary, Colors.white]),
-                  borderRadius: BorderRadius.circular(4)),
-              child: Container(
-                padding: EdgeInsets.only(left: 10),
-                alignment: Alignment.centerLeft,
-                child: Text(nutrition.name),
-              ),
+            final plan = plans[i];
+            return ItemPlanNutrition(
+              plan: plan,
+              onDelete: onDeleteItemPlan,
             );
           },
         ),
       ],
+    );
+  }
+}
+
+class ItemPlanNutrition extends StatelessWidget {
+  const ItemPlanNutrition({
+    super.key,
+    required this.plan,
+    required this.onDelete,
+  });
+
+  final Plan plan;
+  final Function onDelete;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      child: Slidable(
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            children: [
+              // A SlidableAction can have an icon and/or a label.
+              SlidableAction(
+                onPressed: (ctx) {
+                  onDelete(plan.id);
+                },
+                backgroundColor: Color(0xFFFE4A49),
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+                label: 'Delete',
+              ),
+            ],
+          ),
+          child: Container(
+            // margin: EdgeInsets.only(bottom: 15),
+            padding: EdgeInsets.all(12),
+            height: 60,
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFF000000).withOpacity(0.1),
+                    offset: Offset(1, 0),
+                    blurRadius: 15,
+                    spreadRadius: 1,
+                  ),
+                ],
+                gradient: LinearGradient(
+                    stops: [0.02, 0.02], colors: [primary, Colors.white]),
+                borderRadius: BorderRadius.circular(4)),
+            child: Container(
+              padding: EdgeInsets.only(left: 10),
+              alignment: Alignment.centerLeft,
+              child: Text(plan.nutrition.name),
+            ),
+          )),
     );
   }
 }

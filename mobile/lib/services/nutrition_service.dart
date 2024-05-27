@@ -23,7 +23,11 @@ class NutritionService {
   }
 
   static Future<DataNutrition> findOne(id) async {
-    final response = await http.get(Uri.parse("$baseUrl/${id}"));
+    final token = localStorage.getItem('token');
+
+    final response = await http.get(Uri.parse("$baseUrl/${id}"), headers: {
+      "Authorization": token!,
+    });
     final result = jsonDecode(response.body);
 
     DataNutrition nutrition = DataNutrition.fromJson(result['nutrition']);

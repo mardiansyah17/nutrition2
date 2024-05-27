@@ -18,7 +18,35 @@ class DailyPlanService {
     final result = jsonDecode(response.body);
 
     DailyPlan dailyPlan = DailyPlan.fromJson(result);
-
     return dailyPlan;
+  }
+
+  static dynamic deletePlanItem(id) async {
+    final token = localStorage.getItem('token');
+    final response =
+        await http.delete(Uri.parse('$baseUrl/${id.toString()}'), headers: {
+      "Authorization": token!,
+    });
+    if (response.statusCode == 500) return {"meesage": "Error server"};
+  }
+
+  static dynamic createDailyPlan(category_id, nutrition_id, date) async {
+    final token = localStorage.getItem('token');
+    final dateStr = DateFormat('yyyy-MM-dd', 'id_ID')
+        .format(DateTime.parse(date.toString()));
+    Map<String, dynamic> body = {
+      "category_id": category_id,
+      "nutrition_id": nutrition_id,
+      "date": dateStr,
+    };
+    final response = await http.post(
+      Uri.parse('$baseUrl/'),
+      body: json.encode(body),
+      headers: {
+        "Authorization": token!,
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    if (response.statusCode == 500) return {"meesage": "Error server"};
   }
 }

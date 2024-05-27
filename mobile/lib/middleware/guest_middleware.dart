@@ -8,13 +8,15 @@ class GuestMiddleware extends GetMiddleware {
   RouteSettings? redirect(String? route) {
     // TODO: implement redirect
     final token = localStorage.getItem('token');
+
     if (token != null) {
       final user = JwtDecoder.decode(token);
       // userController.setUser(user);
       return RouteSettings(
-          name: '/daily-plan',
-          // name: '/',
-          arguments: {"datetime": DateTime.parse("2024-05-26 00:00:00.000Z")});
+        name: '/',
+        // name: '/daily-plan',
+        // arguments: {"datetime": DateTime.parse("2024-05-26 00:00:00.000Z")}
+      );
     }
 
     return super.redirect(route);

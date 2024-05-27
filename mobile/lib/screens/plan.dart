@@ -22,8 +22,7 @@ class Plan extends StatelessWidget {
             onDaySelected: (selectedDay, focusedDay) {
               print(selectedDay);
               // return;
-              Get.toNamed('/plan-per-day',
-                  arguments: {"datetime": selectedDay});
+              Get.toNamed('/daily-plan', arguments: {"datetime": selectedDay});
             },
             calendarStyle: CalendarStyle(
                 todayDecoration: BoxDecoration(),

@@ -19,7 +19,7 @@ const findAll: RequestHandler = async (req, res) => {
         data: nutritions[0],
         meta: nutritions[1],
       });
-    }, 1000);
+    }, 0);
   } catch (error) {
     console.log(error);
   }

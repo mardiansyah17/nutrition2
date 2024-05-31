@@ -3,6 +3,7 @@ import 'package:get/route_manager.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:nutrition/constans/colors.dart';
 import 'package:nutrition/services/auth_service.dart';
+import 'package:nutrition/widgets/auth_input.dart';
 import 'package:nutrition/widgets/button.dart';
 import 'package:nutrition/widgets/layout.dart';
 
@@ -25,6 +26,7 @@ class _LoginState extends State<Login> {
   void _login() async {
     final response =
         await AuthService.login(emailController.text, passwordController.text);
+
     final statusCode = response['statusCode'];
 
     if (statusCode == 400) {
@@ -49,18 +51,20 @@ class _LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                      hintText: "Email", errorText: errors?["email"]),
+                AuthInput(
                   controller: emailController,
+                  hintText: "Email",
+                  inputType: TextInputType.emailAddress,
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                TextFormField(
+                AuthInput(
                   controller: passwordController,
-                  decoration: InputDecoration(
-                      hintText: "Password", errorText: errors?["password"]),
+                  errorText: errors?["password"],
+                  hintText: "Password",
+                  isObscureText: true,
+                  inputType: TextInputType.visiblePassword,
                 ),
                 SizedBox(
                   height: 15,

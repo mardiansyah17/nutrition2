@@ -24,6 +24,17 @@ model User{
   daily_meal_plan DailyMealPlan[]
 }
 
+model Blog {
+  @@map("blogs")
+  id Int @id @default(autoincrement())
+  cover String
+  title String 
+  content String @db.Text
+  viewers Int @default(0)
+  cratedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 
 model DailyMealPlan {
   @@map("daily_meal_plan")

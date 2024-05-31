@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:localstorage/localstorage.dart';
+import 'package:nutrition/constans/base_url.dart';
 import 'package:nutrition/models/nutrition.dart';
 import 'package:http/http.dart' as http;
 
 class NutritionService {
-  static const baseUrl = "http://10.0.2.2:5001/api/v1/nutritions";
+  static const baseUrl = "$baseUrlApp/nutritions";
   static Future<Nutrition> fetchAll({String? search, int? page = 1}) async {
     final token = localStorage.getItem('token');
     final response = await http.get(

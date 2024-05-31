@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:nutrition/constans/base_url.dart';
 
 class AuthService {
-  static const baseUrl = "http://10.0.2.2:5001/api/v1/auth";
+  static const baseUrl = "$baseUrlApp/auth";
 
   static Future register(email, name, password, confirmPassword) async {
     Map<String, dynamic> body = {

@@ -9,47 +9,56 @@ class Plan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Layout(
-        title: Text("Rencana sehat"),
-        body: Container(
-          color: Colors.white,
-          child: TableCalendar(
-            locale: "id_ID",
-            shouldFillViewport: true,
-            firstDay: DateTime.utc(2010, 10, 16),
-            lastDay: DateTime.utc(2030, 3, 14),
-            focusedDay: DateTime.now(),
-            onDaySelected: (selectedDay, focusedDay) {
-              print(selectedDay);
-              // return;
-              Get.toNamed('/daily-plan', arguments: {"datetime": selectedDay});
-            },
-            calendarStyle: CalendarStyle(
-                todayDecoration: BoxDecoration(),
-                todayTextStyle: TextStyle(color: Colors.black)),
-            headerStyle: const HeaderStyle(
-                formatButtonVisible: false, titleCentered: true),
-            // calendarFormat: CalendarFormat.week,
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Rencana sehat"),
+        ),
+        body: PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {
+            Get.offAllNamed('/');
+          },
+          child: Container(
+            color: Colors.white,
+            child: TableCalendar(
+              locale: "id_ID",
+              shouldFillViewport: true,
+              firstDay: DateTime.utc(2010, 10, 16),
+              lastDay: DateTime.utc(2030, 3, 14),
+              focusedDay: DateTime.now(),
+              onDaySelected: (selectedDay, focusedDay) {
+                print(selectedDay);
+                // return;
+                Get.toNamed('/daily-plan',
+                    arguments: {"datetime": selectedDay});
+              },
+              calendarStyle: CalendarStyle(
+                  todayDecoration: BoxDecoration(),
+                  todayTextStyle: TextStyle(color: Colors.black)),
+              headerStyle: const HeaderStyle(
+                  formatButtonVisible: false, titleCentered: true),
+              // calendarFormat: CalendarFormat.week,
 
-            calendarBuilders: CalendarBuilders(
-              defaultBuilder: (context, day, focusedDay) {
-                if (day.day == 23) {
+              calendarBuilders: CalendarBuilders(
+                defaultBuilder: (context, day, focusedDay) {
+                  if (day.day == 23) {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        day.day.toString(),
+                        style: TextStyle(color: primary, fontSize: 17),
+                      ),
+                    );
+                  }
                   return Container(
                     alignment: Alignment.center,
                     child: Text(
                       day.day.toString(),
-                      style: TextStyle(color: primary, fontSize: 17),
+                      style: TextStyle(fontSize: 17),
                     ),
                   );
-                }
-                return Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    day.day.toString(),
-                    style: TextStyle(fontSize: 17),
-                  ),
-                );
-              },
+                },
+              ),
             ),
           ),
         ));

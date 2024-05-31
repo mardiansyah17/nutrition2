@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:nutrition/constans/colors.dart';
 import 'package:nutrition/services/auth_service.dart';
+import 'package:nutrition/widgets/auth_input.dart';
 import 'package:nutrition/widgets/button.dart';
 import 'package:nutrition/widgets/layout.dart';
 
@@ -31,35 +32,37 @@ class _RegisterState extends State<Register> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                      hintText: "Email", errorText: errors?["email"]),
+                AuthInput(
                   controller: emailController,
+                  hintText: "Email",
+                  inputType: TextInputType.emailAddress,
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                TextFormField(
+                AuthInput(
                   controller: nameController,
-                  decoration: InputDecoration(
-                      hintText: "Nama lengkap", errorText: errors?["name"]),
+                  hintText: "Nama lengkap",
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                TextFormField(
+                AuthInput(
                   controller: passwordController,
-                  decoration: InputDecoration(
-                      hintText: "Password", errorText: errors?["password"]),
+                  errorText: errors?["password"],
+                  hintText: "Password",
+                  isObscureText: true,
+                  inputType: TextInputType.visiblePassword,
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                TextFormField(
+                AuthInput(
                   controller: confirmPasswordController,
-                  decoration: InputDecoration(
-                      hintText: "Konfirmasi password",
-                      errorText: errors?["confirmPassword"]),
+                  errorText: errors?["confirmPassword"],
+                  hintText: "Konfirmasi password",
+                  isObscureText: true,
+                  inputType: TextInputType.visiblePassword,
                 ),
                 SizedBox(
                   height: 15,

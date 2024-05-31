@@ -31,15 +31,13 @@ class Home extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Features(),
-                      SizedBox(height: 30),
-                      BestArticle(),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Features(),
+                    SizedBox(height: 30),
+                    BestArticle(),
+                  ],
                 ),
               ),
             ),

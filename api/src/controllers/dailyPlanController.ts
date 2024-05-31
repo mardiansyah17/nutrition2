@@ -32,41 +32,25 @@ const getDailyPlans: RequestHandler = async (req, res, next) => {
   try {
     const { date: dateParams } = req.params;
     const date = new Date(dateParams);
-    const dailyPlan = await db.dailyMealPlan
-      .findMany({
-        where: {
-          date: date,
-          user_id: req.user.id,
-        },
-        include: {
-          category: true,
-          nutrition: {
-            select: {
-              id: true,
-              name: true,
+    const dailyPlan = await db.category.findMany({
+      include: {
+        daily_meal_plan: {
+          where: {
+            date: date,
+            user_id: req.user.id,
+          },
+          select: {
+            id: true,
+            nutrition: {
+              select: {
+                id: true,
+                name: true,
+              },
             },
           },
         },
-      })
-      .then((item) => {
-        const groupCategory = [] as any[];
-        item.forEach((val) => {
-          if (groupCategory.find((x) => x.id == val.category.id) == undefined) {
-            groupCategory.push({
-              id: val.category.id,
-              name: val.category.name,
-              plans: [{ id: val.id, nutrition: val.nutrition }],
-            });
-          } else {
-            groupCategory.find((x) => {
-              if (x.id == val.category.id) {
-                x.plans.push({ id: val.id, nutrition: val.nutrition });
-              }
-            });
-          }
-        });
-        return groupCategory;
-      });
+      },
+    });
 
     return res.json({ date: date.toDateString(), categories: dailyPlan });
   } catch (er) {
@@ -86,4 +70,25 @@ const deleteDaily: RequestHandler = async (req, res, next) => {
   }
 };
 
-export { getDailyPlans, createDailyPlan, deleteDaily };
+const listDatePlan: RequestHandler = async (req, res, next) => {
+  try {
+    const date = new Date();
+
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 2);
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    return res.json({ firstDay, lastDay });
+    const dailyPlan = await db.dailyMealPlan.findMany({
+      where: {
+        date: {
+          gte: firstDay,
+          lte: lastDay,
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export { getDailyPlans, createDailyPlan, deleteDaily, listDatePlan };

@@ -20,7 +20,7 @@ class DetailNutrition extends StatefulWidget {
 class _DetailNutritionState extends State<DetailNutrition> {
   var id = Get.arguments["id"];
   var category = Get.arguments?["category"];
-  DateTime dateTime = Get.arguments?["dateTime"];
+  DateTime? dateTime = Get.arguments?["dateTime"];
   bool loading = true;
   DataNutrition? nutrition;
 
@@ -48,12 +48,13 @@ class _DetailNutritionState extends State<DetailNutrition> {
             onPressed: () async => {
                   await DailyPlanService.createDailyPlan(
                       category, id, dateTime),
-                  Get.offAllNamed('/daily-plan', arguments: {
+                  Get.offNamed('/daily-plan', arguments: {
                     "datetime": dateTime,
                     "message": "Berhasil menambahkan rencana"
                   })
                 },
-            icon: Icon(Icons.check))
+            icon:
+                Visibility(visible: category != null, child: Icon(Icons.check)))
       ],
       body: SingleChildScrollView(
         child: loading || nutrition == null

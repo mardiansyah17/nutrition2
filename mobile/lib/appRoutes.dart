@@ -1,13 +1,16 @@
 import 'package:get/route_manager.dart';
 import 'package:nutrition/middleware/auth_middleware.dart';
 import 'package:nutrition/middleware/guest_middleware.dart';
+import 'package:nutrition/screens/blog_detail.dart';
 import 'package:nutrition/screens/detail_nutrition.dart';
 import 'package:nutrition/screens/home.dart';
+import 'package:nutrition/screens/result_ai.dart';
 import 'package:nutrition/screens/list_plan_per_day.dart';
 import 'package:nutrition/screens/login.dart';
 import 'package:nutrition/screens/pedometer.dart';
 import 'package:nutrition/screens/plan.dart';
 import 'package:nutrition/screens/register.dart';
+import 'package:nutrition/screens/scan_ai.dart';
 import 'package:nutrition/screens/search_nutritions.dart';
 
 appRoutes() => [
@@ -18,8 +21,14 @@ appRoutes() => [
           middlewares: [GuestMiddleware()]),
       GetPage(name: '/', page: () => Home(), middlewares: [AuthMiddleware()]),
       GetPage(
+          name: '/scan', page: () => ScanAi(), middlewares: [AuthMiddleware()]),
+      GetPage(
           name: '/search-nutrition',
           page: () => const SearchNutrition(),
+          transition: Transition.leftToRight),
+      GetPage(
+          name: '/image-view',
+          page: () => const ResultAi(),
           transition: Transition.leftToRight),
       GetPage(
           name: '/detail-nutrition',
@@ -32,6 +41,10 @@ appRoutes() => [
       GetPage(
           name: '/plan-calendar',
           page: () => const Plan(),
+          transition: Transition.leftToRight),
+      GetPage(
+          name: '/blog',
+          page: () => const BlogDetail(),
           transition: Transition.leftToRight),
       GetPage(
           name: '/daily-plan',

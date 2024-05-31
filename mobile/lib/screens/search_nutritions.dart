@@ -26,8 +26,8 @@ class _SearchNutritionState extends State<SearchNutrition> {
   bool loadingPagination = false;
   final TextEditingController _searchController = TextEditingController();
   bool showAddBtn = Get.arguments?['showAddBtn'] ?? false;
-  int category = Get.arguments?['category'];
-  DateTime dateTime = Get.arguments?['date'];
+  int? category = Get.arguments?['category'];
+  DateTime? dateTime = Get.arguments?['date'];
 
   @override
   void initState() {

@@ -5,7 +5,6 @@ import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:nutrition/constans/colors.dart';
 import 'package:nutrition/models/daily_plan.dart';
-import 'package:nutrition/models/nutrition.dart';
 import 'package:nutrition/services/daily_plan_service.dart';
 import 'package:nutrition/widgets/layout.dart';
 import 'package:nutrition/widgets/loading.dart';
@@ -49,31 +48,45 @@ class _ListPlanPerDayState extends State<ListPlanPerDay> {
 
   void deletePlanHandler(int id) async {
     await DailyPlanService.deletePlanItem(id);
+    Fluttertoast.showToast(
+        msg: "Berhasil di hapus",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: primary,
+        textColor: Colors.white,
+        fontSize: 16.0);
     fetchPlan();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      title: Text(DateFormat('dd MMMM yyyy', 'id_ID')
-          .format(DateTime.parse(_dateTime.toString()))),
-      body: isLoading
-          ? const Loading()
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                  itemCount: dailyPlan?.categories.length ?? 0,
-                  itemBuilder: (ctx, i) {
-                    final category = dailyPlan!.categories[i];
-                    return DailyPlanList(
-                      title: category.name,
-                      category: category.id,
-                      plans: category.plans,
-                      dateTime: _dateTime,
-                      onDeleteItemPlan: deletePlanHandler,
-                    );
-                  }),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(DateFormat('dd MMMM yyyy', 'id_ID')
+            .format(DateTime.parse(_dateTime.toString()))),
+      ),
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          Get.toNamed('/plan-calendar');
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+              itemCount: dailyPlan?.categories.length ?? 0,
+              itemBuilder: (ctx, i) {
+                final category = dailyPlan!.categories[i];
+                return DailyPlanList(
+                  title: category.name,
+                  category: category.id,
+                  plans: category.plans,
+                  dateTime: _dateTime,
+                  onDeleteItemPlan: deletePlanHandler,
+                );
+              }),
+        ),
+      ),
     );
   }
 }
@@ -101,7 +114,7 @@ class DailyPlanList extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             GestureDetector(
               onTap: () => Get.toNamed('/search-nutrition', arguments: {
@@ -119,18 +132,34 @@ class DailyPlanList extends StatelessWidget {
         SizedBox(
           height: 5,
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: plans.length,
-          itemBuilder: (ctx, i) {
-            final plan = plans[i];
-            return ItemPlanNutrition(
-              plan: plan,
-              onDelete: onDeleteItemPlan,
-            );
-          },
-        ),
+        plans.length == 0
+            ? Container(
+                height: 60,
+                margin: EdgeInsets.only(top: 15),
+                child: Text(
+                  "Wah belum ada rencana $title",
+                  style: TextStyle(fontSize: 15),
+                ),
+              )
+            : ReorderableListView(
+                itemExtent: 70,
+                shrinkWrap: true,
+                onReorder: (oldIndex, newIndex) {
+                  print(oldIndex);
+                  if (newIndex > oldIndex) {
+                    newIndex -= 1;
+                  }
+                  final item = plans.removeAt(oldIndex);
+                  plans.insert(newIndex, item);
+                },
+                children: <Widget>[
+                  for (int index = 0; index < plans.length; index += 1)
+                    ItemPlanNutrition(
+                        key: ValueKey(plans[index].id),
+                        plan: plans[index],
+                        onDelete: onDeleteItemPlan)
+                ],
+              )
       ],
     );
   }
@@ -147,46 +176,44 @@ class ItemPlanNutrition extends StatelessWidget {
   final Function onDelete;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      child: Slidable(
-          endActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            children: [
-              // A SlidableAction can have an icon and/or a label.
-              SlidableAction(
-                onPressed: (ctx) {
-                  onDelete(plan.id);
-                },
-                backgroundColor: Color(0xFFFE4A49),
-                foregroundColor: Colors.white,
-                icon: Icons.delete,
-                label: 'Delete',
-              ),
-            ],
-          ),
-          child: Container(
-            // margin: EdgeInsets.only(bottom: 15),
-            padding: EdgeInsets.all(12),
-            height: 60,
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFF000000).withOpacity(0.1),
-                    offset: Offset(1, 0),
-                    blurRadius: 15,
-                    spreadRadius: 1,
-                  ),
-                ],
-                gradient: LinearGradient(
-                    stops: [0.02, 0.02], colors: [primary, Colors.white]),
-                borderRadius: BorderRadius.circular(4)),
-            child: Container(
-              padding: EdgeInsets.only(left: 10),
-              alignment: Alignment.centerLeft,
-              child: Text(plan.nutrition.name),
+    return Slidable(
+        endActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          children: [
+            // A SlidableAction can have an icon and/or a label.
+            SlidableAction(
+              onPressed: (ctx) {
+                onDelete(plan.id);
+              },
+              backgroundColor: Color(0xFFFE4A49),
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              label: 'Delete',
             ),
-          )),
-    );
+          ],
+        ),
+        child: Container(
+          // margin: EdgeInsets.only(bottom: 15),
+
+          padding: EdgeInsets.all(12),
+          height: 60,
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF000000).withOpacity(0.1),
+                  offset: Offset(1, 0),
+                  blurRadius: 15,
+                  spreadRadius: 1,
+                ),
+              ],
+              gradient: LinearGradient(
+                  stops: [0.02, 0.02], colors: [primary, Colors.white]),
+              borderRadius: BorderRadius.circular(4)),
+          child: Container(
+            padding: EdgeInsets.only(left: 10),
+            alignment: Alignment.centerLeft,
+            child: Text(plan.nutrition.name),
+          ),
+        ));
   }
 }

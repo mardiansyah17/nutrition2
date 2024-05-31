@@ -43,7 +43,8 @@ class Category {
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         name: json["name"],
-        plans: List<Plan>.from(json["plans"].map((x) => Plan.fromJson(x))),
+        plans: List<Plan>.from(
+            json["daily_meal_plan"].map((x) => Plan.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

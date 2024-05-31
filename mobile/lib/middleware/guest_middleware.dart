@@ -15,7 +15,8 @@ class GuestMiddleware extends GetMiddleware {
       return RouteSettings(
         name: '/',
         // name: '/daily-plan',
-        // arguments: {"datetime": DateTime.parse("2024-05-26 00:00:00.000Z")}
+        // arguments: {"id": 1}
+        //
       );
     }
 

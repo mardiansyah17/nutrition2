@@ -3,6 +3,10 @@ import 'package:nutrition/constans/colors.dart';
 
 class AppTheme {
   static final light = ThemeData.light().copyWith(
+      scaffoldBackgroundColor: Colors.white,
+      appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+      canvasColor: Colors.transparent,
+      shadowColor: Colors.transparent,
       inputDecorationTheme: InputDecorationTheme(
           errorBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),

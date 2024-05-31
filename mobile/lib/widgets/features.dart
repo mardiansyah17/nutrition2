@@ -38,17 +38,17 @@ class Features extends StatelessWidget {
           height: 130,
           width: MediaQuery.of(context).size.width / 2 - 30,
           child: const FeatureItem(
-            svgName: "walking",
-            title: "Pedometer",
-            routeName: "/pedometer",
+            icon: Icons.document_scanner_outlined,
+            title: "Scan",
+            routeName: "/scan",
           ),
         ),
         SizedBox(
           height: 130,
           width: MediaQuery.of(context).size.width / 2 - 30,
           child: const FeatureItem(
-            svgName: "recipe",
-            title: "Resep",
+            icon: Icons.chat,
+            title: "Konsultasi",
           ),
         ),
       ],

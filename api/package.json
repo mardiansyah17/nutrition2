@@ -6,8 +6,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
-    "build": "rimraf dist && tsc",
-    "start:dist": "node dist/src/index.js",
+    "build": "rimraf public && tsc",
+    "start:dist": "node public/src/index.js",
     "lint": "eslint --fix src test",
     "test": "jest",
     "typecheck": "tsc --noEmit"

@@ -48,55 +48,55 @@ class _ScanAiState extends State<ScanAi> {
     }
 
     return Scaffold(
-      body: AspectRatio(
-        aspectRatio: 1 / _controller!.value.aspectRatio,
-        child: CameraPreview(_controller!).build(context),
-        // child: Column(
-        //   // fit: StackFit.expand,
-        //   children: [
-        //     RotatedBox(
-        //       quarterTurns: 1,
-        //       child: CameraPreview(_controller!),
-        //     ),
-        //     Container(
-        //       color: Colors.grey.shade900.withOpacity(0.5),
-        //       height: 120,
-        //       child: Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //         children: [
-        //           IconButton(
-        //             icon: Icon(Icons.image),
-        //             onPressed: _pickImage,
-        //             color: Colors.white,
-        //             iconSize: 45,
-        //           ),
-        //           IconButton(
-        //             icon: Icon(Icons.camera),
-        //             onPressed: _takePicture,
-        //             color: Colors.white,
-        //             iconSize: 55,
-        //           ),
-        //           IconButton(
-        //             icon: Icon(Icons.flash_on),
-        //             onPressed: () {},
-        //             color: Colors.white,
-        //             iconSize: 45,
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //     Visibility(
-        //       visible: isLoading,
-        //       child: Container(
-        //         color: Colors.black.withOpacity(0.5),
-        //         child: const Center(
-        //             child: CircularProgressIndicator(
-        //           color: primary,
-        //         )),
-        //       ),
-        //     ),
-        //   ],
-        // ),
+      body: Column(
+        // fit: StackFit.expand,
+        children: [
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: _controller!.value.aspectRatio,
+                  child: CameraPreview(_controller!))),
+          Container(
+            color: Colors.grey.shade900.withOpacity(0.5),
+            height: 120,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.image),
+                  onPressed: _pickImage,
+                  color: Colors.white,
+                  iconSize: 45,
+                ),
+                isLoading
+                    ? CircularProgressIndicator(
+                        color: primary,
+                      )
+                    : IconButton(
+                        icon: Icon(Icons.camera),
+                        onPressed: _takePicture,
+                        color: Colors.white,
+                        iconSize: 55,
+                      ),
+                IconButton(
+                  icon: Icon(Icons.flash_on),
+                  onPressed: () {},
+                  color: Colors.white,
+                  iconSize: 45,
+                ),
+              ],
+            ),
+          ),
+          // Visibility(
+          //   visible: isLoading,
+          //   child: Container(
+          //     color: Colors.black.withOpacity(0.5),
+          //     child: const Center(
+          //         child: CircularProgressIndicator(
+          //       color: primary,
+          //     )),
+          //   ),
+          // ),
+        ],
       ),
     );
   }

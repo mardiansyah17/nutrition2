@@ -23,24 +23,45 @@ class _ResultAiState extends State<ResultAi> with TickerProviderStateMixin {
       AnimationController(vsync: this, duration: Duration(seconds: 3))
         ..repeat(reverse: true);
   String? answer;
+  String prompt = """
+Saya membuat aplikasi analisa komposisi gizi dari foto menggunakan AI. 
+Silakan analisa gambar berikut dan jawab pertanyaan-pertanyaan berikut:
+ Apa nama makanan atau minuman tersebut?
+ Berikan tabel komposisi gizinya per 100 gram dalam format berikut jika gambar tersebut bukan makanan atau minuman jawab maaf gambar tidak sesuai:
 
+   | Nutrisi         | Jumlah     |
+   |-----------------|------------|
+   | Kalori          | x kcal     |
+   | Protein         | x g        |
+   | Lemak           | x g        |
+   | Karbohidrat     | x g        |
+   | Serat           | x g        |
+   | Gula            | x g        |
+   | Vitamin A       | x IU       |
+   | Vitamin C       | x mg       |
+   | Kalsium         | x mg       |
+   | Zat Besi        | x mg       |
+
+Berikut adalah link atau gambar makanan/minuman yang ingin dianalisa: [URL atau Gambar]
+
+Terima kasih atas bantuannya!
+""";
   @override
   void initState() {
-    // gemini.textAndImage(
-    //     // generationConfig: ,
-    //     text:
-    //         "Apakah ini termasuk makanan atau minuman jika iya apa namanya dan apa saja komposisinya buatkan secara detail dalam bentuk tabel pastikan sangat detail",
+    gemini.textAndImage(
+        // generationConfig: ,
+        text: prompt,
 
-    //     /// text
-    //     images: [File(imagePath).readAsBytesSync()]
+        /// text
+        images: [File(imagePath).readAsBytesSync()]
 
-    //     /// list of images
-    //     ).then((val) {
-    //   setState(() {
-    //     answer = val?.content?.parts?.last.text;
-    //   });
-    //   animationController.stop();
-    // });
+        /// list of images
+        ).then((val) {
+      setState(() {
+        answer = val?.content?.parts?.last.text;
+      });
+      animationController.stop();
+    });
     super.initState();
   }
 
@@ -60,7 +81,7 @@ class _ResultAiState extends State<ResultAi> with TickerProviderStateMixin {
                   padding: EdgeInsets.all(1),
                   child: Image.file(
                     File(imagePath),
-                    height: 500,
+                    // height: 500,
                   ),
                 ),
                 ImageScanner(controller: animationController)

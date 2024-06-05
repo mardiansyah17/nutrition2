@@ -97,7 +97,7 @@ class FeatureItem extends StatelessWidget {
         }
         Get.toNamed(routeName!);
       },
-      child: Container(
+      child: Ink(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: secondBg,

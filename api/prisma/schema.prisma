@@ -9,8 +9,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+directUrl = env("DIRECT_URL")
 }
 
 model User{
@@ -50,6 +51,7 @@ model DailyMealPlan {
 }
 
 model Category {
+  @@map("categories")
   id Int @id @default(autoincrement())
   name String
   daily_meal_plan DailyMealPlan[]

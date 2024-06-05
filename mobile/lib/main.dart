@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       getPages: appRoutes(),
-      initialRoute: "/scan",
+      initialRoute: "/login",
     );
   }
 }

@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "sourceMap": true,
-    "target": "esnext",
     "module": "commonjs",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
     "noImplicitAny": true,
-    "strict": true,
-    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
     "typeRoots": ["types"],
-
-    "resolveJsonModule": true
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]
+    }
   },
-  "include": ["./*.js", "src/**/*.ts", "test/**/*.ts", "./prisma/seed.ts", "./seed.ts"]
+  "include": ["./src/**/*"]
 }

@@ -6,11 +6,9 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
-    "build": "rimraf public && tsc",
-    "start:dist": "node public/src/index.js",
+    "build": "rimraf dist && tsc",
     "lint": "eslint --fix src test",
-    "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "vercel-build": "echo mardi"
   },
   "pre-commit": [
     "ts.check",

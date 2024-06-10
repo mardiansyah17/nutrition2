@@ -10,7 +10,7 @@ class NutritionTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Table(
-        columnWidths: {
+        columnWidths:const {
           0: FractionColumnWidth(0.4),
           1: FractionColumnWidth(0.3),
           2: FractionColumnWidth(0.3),

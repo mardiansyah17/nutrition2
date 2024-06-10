@@ -22,26 +22,42 @@ class _DetailNutritionState extends State<DetailNutrition> {
   var ids = Get.arguments['ids'];
   var category = Get.arguments?["category"];
   DateTime? dateTime = Get.arguments?["dateTime"];
-  bool loading = true;
+  bool loading = false;
   DataNutrition? nutrition;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (id == null) {
+  
+    if (id != null) {
+      NutritionService.findOne(id).then((value) => {
+            setState(() {
+              nutrition = value;
+              loading = false;
+            })
+          });
+    }
+  
+    if(ids!=null){
+      NutritionService.getManyByIds(ids).then((value){
+        print(value);
+           setState(() {
+              nutrition = value;
+              loading = false;
+            });
+      });
+        if (id == null) {
       return print('kosong');
     }
-    NutritionService.findOne(id).then((value) => {
-          setState(() {
-            nutrition = value;
-            loading = false;
-          })
-        });
+    }
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {
+    print(ids);
     return Layout(
       title: const Text("Kandungan nutrisi"),
       actions: [
@@ -72,11 +88,11 @@ class _DetailNutritionState extends State<DetailNutrition> {
                         alignment: Alignment.center,
                         child: Column(
                           children: [
-                            Text(
-                              "${nutrition?.name ?? ""}",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
-                            ),
+                            // Text(
+                            //   "${nutrition?.name ?? ""}",
+                            //   style: TextStyle(
+                            //       fontSize: 18, fontWeight: FontWeight.w600),
+                            // ),
                             Text(
                               "Takaran per 100 g",
                               style: TextStyle(
@@ -85,7 +101,7 @@ class _DetailNutritionState extends State<DetailNutrition> {
                           ],
                         ),
                       ),
-                      _allChartNutrition(),
+                      // _allChartNutrition(),
                       SizedBox(
                         height: 20,
                       ),
@@ -149,59 +165,6 @@ class _DetailNutritionState extends State<DetailNutrition> {
           akg: 325,
         ),
       ],
-    );
-  }
-}
-
-class NilaiGizi extends StatelessWidget {
-  const NilaiGizi({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 5),
-      child: const Row(
-        children: [
-          Text("Energi sdasd", style: TextStyle(color: primary)),
-          SizedBox(
-            width: 130,
-          ),
-          Text("180 kcal", style: TextStyle(color: primary)),
-          SizedBox(
-            width: 80,
-          ),
-          Text("8,37%", style: TextStyle(color: primary)),
-        ],
-      ),
-    );
-  }
-}
-
-class SubNilaiGizi extends StatelessWidget {
-  const SubNilaiGizi({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10),
-      margin: const EdgeInsets.only(bottom: 5),
-      child: const Row(
-        children: [
-          Text("Energi"),
-          SizedBox(
-            width: 120,
-          ),
-          Text("180 kcal"),
-          SizedBox(
-            width: 80,
-          ),
-          Text("8,37%"),
-        ],
-      ),
     );
   }
 }

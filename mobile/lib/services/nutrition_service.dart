@@ -35,4 +35,24 @@ class NutritionService {
 
     return nutrition;
   }
+
+  static Future<dynamic> getManyByIds(ids) async {
+    final token = localStorage.getItem('token');
+    Map<String, List> body = {"ids": ids};
+    final response = await http.post(Uri.parse("$baseUrl/get-many"),
+        body: json.encode(body),
+        headers: {
+          "Authorization": token!,
+          'Content-Type': 'application/json; charset=UTF-8',
+        });
+    if (response.statusCode == 404) {
+      return print("not found");
+    }
+
+    final result = jsonDecode(response.body);
+
+    DataNutrition nutrition = DataNutrition.fromJson(result['nutrition']);
+
+    return nutrition;
+  }
 }

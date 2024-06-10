@@ -32,9 +32,9 @@ class Nutrition {
 }
 
 class DataNutrition {
-  int id;
-  String code;
-  String name;
+  int? id;
+  String? code;
+  String? name;
   double? energyKj;
   double? energyKcal;
   double? water;
@@ -170,8 +170,8 @@ class DataNutrition {
   double? cholesterol;
   double? breadUnits;
   double? nacl;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   DataNutrition({
     required this.id,
@@ -644,8 +644,8 @@ class DataNutrition {
             ? double.parse(json["bread_units"])
             : null,
         nacl: json["nacl"] != null ? double.parse(json["nacl"]) : null,
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        createdAt:json["createdAt"]!=null? DateTime.parse(json["createdAt"]):null,
+        updatedAt:json["updatedAt"]!=null? DateTime.parse(json["updatedAt"]):null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -787,7 +787,7 @@ class DataNutrition {
         "cholesterol": cholesterol,
         "bread_units": breadUnits,
         "nacl": nacl,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
       };
 }

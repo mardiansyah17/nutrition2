@@ -83,7 +83,7 @@ class _SearchNutritionState extends State<SearchNutrition> {
     }
   }
 
-  void tapFoodHandler(int id) {
+  void tapFoodHandler(int? id) {
     if (isChose) {
       if (selectedFood.contains(id)) {
         setState(() {
@@ -91,7 +91,7 @@ class _SearchNutritionState extends State<SearchNutrition> {
         });
       } else {
         setState(() {
-          selectedFood.add(id);
+          selectedFood.add(id as int);
         });
       }
       if (selectedFood.isEmpty) {
@@ -142,7 +142,14 @@ class _SearchNutritionState extends State<SearchNutrition> {
             shape: RoundedRectangleBorder(
                 side: BorderSide(width: 1, color: Colors.grey.shade300),
                 borderRadius: BorderRadius.circular(20)),
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed('/detail-nutrition', arguments: {
+                "ids": selectedFood,
+                "showAddBtn": showAddBtn,
+                "category": category,
+                "dateTime": dateTime
+              });
+            },
             child: const Icon(
               Icons.calculate,
               color: primary,
@@ -166,7 +173,7 @@ class _SearchNutritionState extends State<SearchNutrition> {
                           onLongPress: () {
                             setState(() {
                               isChose = true;
-                              selectedFood = [...selectedFood, item.id];
+                              selectedFood = [...selectedFood, item.id as int];
                             });
                           },
                           onTap: () => tapFoodHandler(item.id),
@@ -200,7 +207,7 @@ class _SearchNutritionState extends State<SearchNutrition> {
                                           .start, // Teks akan ditempatkan ke kiri
                                       children: [
                                         Text(
-                                          item.name,
+                                          item.name as String,
                                           style: const TextStyle(
                                               color: primary, fontSize: 16),
                                         ),

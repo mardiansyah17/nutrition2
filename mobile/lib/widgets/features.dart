@@ -17,6 +17,15 @@ class Features extends StatelessWidget {
       children: [
         SizedBox(
           height: 130,
+          width: MediaQuery.of(context).size.width / 2 - 30,
+          child: const FeatureItem(
+            svgName: "ai",
+            title: "Scan",
+            routeName: "/scan",
+          ),
+        ),
+        SizedBox(
+          height: 130,
           width: MediaQuery.of(context).size.width / 2 -
               30, // Setengah dari lebar layar dikurangi margin
           child: const FeatureItem(
@@ -32,15 +41,6 @@ class Features extends StatelessWidget {
             icon: Icons.calendar_month,
             title: "Rencana sehat",
             routeName: "/plan-calendar",
-          ),
-        ),
-        SizedBox(
-          height: 130,
-          width: MediaQuery.of(context).size.width / 2 - 30,
-          child: const FeatureItem(
-            icon: Icons.document_scanner_outlined,
-            title: "Scan",
-            routeName: "/scan",
           ),
         ),
         SizedBox(

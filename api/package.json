@@ -8,7 +8,7 @@
     "dev": "nodemon src/index.ts",
     "build": "rimraf dist && tsc",
     "lint": "eslint --fix src test",
-    "vercel-build": "echo mardi"
+    "vercel-build": "npx prisma generate"
   },
   "pre-commit": [
     "ts.check",

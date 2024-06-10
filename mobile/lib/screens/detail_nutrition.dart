@@ -19,6 +19,7 @@ class DetailNutrition extends StatefulWidget {
 
 class _DetailNutritionState extends State<DetailNutrition> {
   var id = Get.arguments["id"];
+  var ids = Get.arguments['ids'];
   var category = Get.arguments?["category"];
   DateTime? dateTime = Get.arguments?["dateTime"];
   bool loading = true;

@@ -24,6 +24,8 @@ class _SearchNutritionState extends State<SearchNutrition> {
   Meta? meta;
   bool loading = true;
   bool loadingPagination = false;
+  bool isChose = false;
+  List<int> selectedFood = [];
   final TextEditingController _searchController = TextEditingController();
   bool showAddBtn = Get.arguments?['showAddBtn'] ?? false;
   int? category = Get.arguments?['category'];
@@ -81,11 +83,71 @@ class _SearchNutritionState extends State<SearchNutrition> {
     }
   }
 
+  void tapFoodHandler(int id) {
+    if (isChose) {
+      if (selectedFood.contains(id)) {
+        setState(() {
+          selectedFood.remove(id);
+        });
+      } else {
+        setState(() {
+          selectedFood.add(id);
+        });
+      }
+      if (selectedFood.isEmpty) {
+        setState(() {
+          isChose = false;
+        });
+      }
+
+      return;
+    }
+    Get.toNamed('/detail-nutrition', arguments: {
+      "id": id,
+      "showAddBtn": showAddBtn,
+      "category": category,
+      "dateTime": dateTime
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Layout(
-        title: SearchBox(
-          inputController: _searchController,
+    return Scaffold(
+        appBar: AppBar(
+          actions: [
+            Visibility(
+              visible: isChose,
+              child: Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    setState(() {
+                      isChose = false;
+                      selectedFood = [];
+                    });
+                  },
+                ),
+              ),
+            )
+          ],
+          title: SearchBox(
+            inputController: _searchController,
+          ),
+        ),
+        floatingActionButton: Visibility(
+          visible: isChose,
+          child: FloatingActionButton(
+            backgroundColor: secondBg,
+            shape: RoundedRectangleBorder(
+                side: BorderSide(width: 1, color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(20)),
+            onPressed: () {},
+            child: const Icon(
+              Icons.calculate,
+              color: primary,
+            ),
+          ),
         ),
         body: Container(
           // color: Colors.amber,
@@ -101,14 +163,13 @@ class _SearchNutritionState extends State<SearchNutrition> {
                         var item = nutritions[index];
 
                         return GestureDetector(
-                          onTap: () {
-                            Get.toNamed('/detail-nutrition', arguments: {
-                              "id": item.id,
-                              "showAddBtn": showAddBtn,
-                              "category": category,
-                              "dateTime": dateTime
+                          onLongPress: () {
+                            setState(() {
+                              isChose = true;
+                              selectedFood = [...selectedFood, item.id];
                             });
                           },
+                          onTap: () => tapFoodHandler(item.id),
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             margin: const EdgeInsets.only(bottom: 14),
@@ -123,7 +184,9 @@ class _SearchNutritionState extends State<SearchNutrition> {
                                     spreadRadius: -5,
                                   ),
                                 ],
-                                border: Border.all(color: Colors.grey.shade200),
+                                border: selectedFood.contains(item.id)
+                                    ? Border.all(color: primary)
+                                    : Border.all(color: Colors.grey.shade200),
                                 borderRadius: BorderRadius.circular(10)),
                             alignment: Alignment.centerLeft,
                             child: Column(
@@ -245,19 +308,19 @@ class SearchBox extends StatelessWidget {
     return Container(
       width: 300,
       height: 50,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: primary, // Warna border biru
-          width: 2.0, // Ketebalan border
-        ),
-        borderRadius: BorderRadius.circular(8), // Mengatur sudut border
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(
+      //     color: primary, // Warna border biru
+      //     width: 2.0, // Ketebalan border
+      //   ),
+      //   borderRadius: BorderRadius.circular(8), // Mengatur sudut border
+      // ),
       child: Row(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(Icons.search, color: primary), // Icon pencarian
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.all(8.0),
+          //   child: Icon(Icons.search, color: primary), // Icon pencarian
+          // ),
           Expanded(
             child: TextField(
               controller: inputController,

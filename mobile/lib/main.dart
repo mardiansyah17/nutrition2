@@ -9,7 +9,7 @@ import 'package:nutrition/app_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initLocalStorage();
-  Gemini.init(apiKey: 'AIzaSyCskPOKeVJf1kpKtfQO4WWbpPppcUQf0A8');
+  Gemini.init(apiKey: "");
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 

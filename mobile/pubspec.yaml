@@ -65,6 +65,7 @@ dependencies:
   flutter_gemini: ^2.0.4
   flutter_markdown: ^0.7.1
   permission_handler: ^11.3.1
+  pull_to_refresh_flutter3: ^2.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

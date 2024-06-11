@@ -3,7 +3,6 @@ import 'package:get/route_manager.dart';
 import 'package:nutrition/models/blog.dart';
 import 'package:nutrition/services/blog_service.dart';
 import 'package:nutrition/widgets/loading.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class BestArticle extends StatefulWidget {
   const BestArticle({super.key});

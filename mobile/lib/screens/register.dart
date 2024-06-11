@@ -19,6 +19,7 @@ class _RegisterState extends State<Register> {
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  bool isLoading = false;
 // error state
   dynamic errors;
 
@@ -34,6 +35,7 @@ class _RegisterState extends State<Register> {
               children: [
                 AuthInput(
                   controller: emailController,
+                  errorText: errors?["email"],
                   hintText: "Email",
                   inputType: TextInputType.emailAddress,
                 ),
@@ -42,6 +44,7 @@ class _RegisterState extends State<Register> {
                 ),
                 AuthInput(
                   controller: nameController,
+                  errorText: errors?["name"],
                   hintText: "Nama lengkap",
                 ),
                 SizedBox(
@@ -70,6 +73,7 @@ class _RegisterState extends State<Register> {
                 Button(
                   onPressed: _registerHandler,
                   text: "Daftar",
+                  disable: isLoading,
                 ),
                 SizedBox(
                   height: 15,
@@ -93,6 +97,9 @@ class _RegisterState extends State<Register> {
   }
 
   void _registerHandler() async {
+    setState(() {
+      isLoading = true;
+    });
     final response = await AuthService.register(
         emailController.text,
         nameController.text,
@@ -111,5 +118,8 @@ class _RegisterState extends State<Register> {
 
       Get.toNamed('/home');
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 }

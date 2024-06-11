@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:nutrition/constans/colors.dart';
@@ -18,12 +19,15 @@ class _LoginState extends State<Login> {
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   dynamic errors;
 
   void _login() async {
+    setState(() {
+      isLoading = true;
+    });
     final response =
         await AuthService.login(emailController.text, passwordController.text);
 
@@ -34,11 +38,24 @@ class _LoginState extends State<Login> {
         errors = response["result"];
       });
     }
+    if (statusCode == 401) {
+      Fluttertoast.showToast(
+          msg: "Email atau password salah",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red.shade400,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
     if (statusCode == 200) {
       final token = response['result']['token'];
       localStorage.setItem('token', token);
       Get.toNamed('/home');
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -54,6 +71,7 @@ class _LoginState extends State<Login> {
                 AuthInput(
                   controller: emailController,
                   hintText: "Email",
+                  errorText: errors?["email"],
                   inputType: TextInputType.emailAddress,
                 ),
                 SizedBox(
@@ -72,6 +90,7 @@ class _LoginState extends State<Login> {
                 Button(
                   onPressed: _login,
                   text: "Masuk",
+                  disable: isLoading,
                 ),
                 SizedBox(
                   height: 15,

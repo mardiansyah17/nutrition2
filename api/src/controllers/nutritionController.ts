@@ -60,7 +60,7 @@ const findMany: RequestHandler = async (req, res) => {
       },
     });
 
-    const nutrition = getNutrition.map((data, i) => {
+    const nutrition = getNutrition.map((data: any, i: number) => {
       // console.log(i < getNutrition.length - 1);
 
       if (i < getNutrition.length - 1) {

@@ -7,8 +7,10 @@ class AppTheme {
       appBarTheme: AppBarTheme(backgroundColor: Colors.white),
       canvasColor: Colors.transparent,
       shadowColor: Colors.transparent,
-      inputDecorationTheme: InputDecorationTheme(
+      inputDecorationTheme: const InputDecorationTheme(
           errorBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+          focusedErrorBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
           enabledBorder:
               OutlineInputBorder(borderSide: BorderSide(color: primary)),

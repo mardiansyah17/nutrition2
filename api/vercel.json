@@ -4,7 +4,7 @@
   "builds": [
     {
       "src": "/src/index.ts",
-      "use": "@now/node"
+      "use": "@vercel/node"
     }
   ]
 }

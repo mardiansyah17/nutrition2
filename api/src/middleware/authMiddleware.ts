@@ -1,4 +1,3 @@
-import { User } from "@prisma/client";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 export const authMiddleware: RequestHandler = async (req, res, next) => {

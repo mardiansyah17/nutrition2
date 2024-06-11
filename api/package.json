@@ -6,9 +6,9 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
-    "build": "rimraf dist && tsc",
+    "build": "npx prisma db push && npx prisma generate && rimraf dist && tsc",
     "lint": "eslint --fix src test",
-    "vercel-build": "npx prisma generate"
+    "postinstall": "prisma generate"
   },
   "pre-commit": [
     "ts.check",

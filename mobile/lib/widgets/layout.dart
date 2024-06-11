@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:nutrition/constans/colors.dart';
 
 class Layout extends StatelessWidget {
-  const Layout(
-      {super.key,
-      this.title,
-      required this.body,
-      this.isNotHome = true,
-      this.actions});
+  Layout({
+    super.key,
+    this.title,
+    required this.body,
+    this.isNotHome = true,
+    this.actions,
+  });
+
   final Widget body;
   final List<Widget>? actions;
   final Widget? title;
   final bool isNotHome;
+
+  String? token;
+  Map<String, dynamic>? decodedToken;
+
   @override
   Widget build(BuildContext context) {
+    // Initialize token and decodedToken here
+    token = localStorage.getItem('token');
+    if (token != null) {
+      decodedToken = JwtDecoder.decode(token!);
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xffFBFBFB),
       extendBody: true,
@@ -41,16 +54,18 @@ class Layout extends StatelessWidget {
               automaticallyImplyLeading: false,
             )
           : null,
-      drawer: MyDrawer(),
+      drawer: MyDrawer(
+        fullname: decodedToken?['name'] ?? "",
+      ),
       body: body,
     );
   }
 }
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({
-    super.key,
-  });
+  const MyDrawer({super.key, this.fullname});
+
+  final String? fullname;
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +82,8 @@ class MyDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            // accountEmail: Text('jane.doe@example.com'),
             accountName: Text(
-              'Muhammad Mardiansyah',
+              fullname!,
               style: TextStyle(fontSize: 16, color: Colors.black),
             ),
             decoration: BoxDecoration(),

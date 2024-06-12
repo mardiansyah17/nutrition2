@@ -1,0 +1,208 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id              Int             @id @default(autoincrement())
+  email           String          @unique
+  name            String
+  password        String
+  cratedAt        DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  daily_meal_plan DailyMealPlan[]
+
+  @@map("users")
+}
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  cover     String
+  title     String
+  content   String   @db.Text
+  viewers   Int      @default(0)
+  cratedAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("blogs")
+}
+
+model DailyMealPlan {
+  id           Int       @id @default(autoincrement())
+  order        Int
+  date         DateTime  @db.Date
+  user_id      Int
+  category_id  Int
+  nutrition_id Int
+  user         User      @relation(fields: [user_id], references: [id])
+  category     Category  @relation(fields: [category_id], references: [id])
+  nutrition    Nutrition @relation(fields: [nutrition_id], references: [id])
+
+  @@map("daily_meal_plan")
+}
+
+model Category {
+  id              Int             @id @default(autoincrement())
+  name            String
+  daily_meal_plan DailyMealPlan[]
+
+  @@map("categories")
+}
+
+model Nutrition {
+  id                              Int             @id @default(autoincrement())
+  code                            String
+  name                            String
+  daily_meal_plan                 DailyMealPlan[]
+  energy_kj                       Decimal?        @db.Decimal(10, 2)
+  energy_kcal                     Decimal?        @db.Decimal(10, 2)
+  water                           Decimal?        @db.Decimal(10, 2)
+  protein                         Decimal?        @db.Decimal(10, 2)
+  fat                             Decimal?        @db.Decimal(10, 2)
+  carbohydrate                    Decimal?        @db.Decimal(10, 2)
+  dietary_fiber                   Decimal?        @db.Decimal(10, 2)
+  minerals                        Decimal?        @db.Decimal(10, 2)
+  organic_acids                   Decimal?        @db.Decimal(10, 2)
+  alcohol                         Decimal?        @db.Decimal(10, 2)
+  vitamin_a                       Decimal?        @db.Decimal(10, 2)
+  retinol                         Decimal?        @db.Decimal(10, 2)
+  carotene                        Decimal?        @db.Decimal(10, 2)
+  vitamin_d                       Decimal?        @db.Decimal(10, 2)
+  vitamin_e_eq                    Decimal?        @db.Decimal(10, 2)
+  vitamin_e                       Decimal?        @db.Decimal(10, 2)
+  vitamin_k                       Decimal?        @db.Decimal(10, 2)
+  vitamin_b1                      Decimal?        @db.Decimal(10, 2)
+  vitamin_b2                      Decimal?        @db.Decimal(10, 2)
+  niacine                         Decimal?        @db.Decimal(10, 2)
+  niacine_equiv                   Decimal?        @db.Decimal(10, 2)
+  pantothenic_acid                Decimal?        @db.Decimal(10, 2)
+  vitamin_b6                      Decimal?        @db.Decimal(10, 2)
+  biotine                         Decimal?        @db.Decimal(10, 2)
+  folic_acid_eq                   Decimal?        @db.Decimal(10, 2)
+  total_folic_acid                Decimal?        @db.Decimal(10, 2)
+  free_folic_acid                 Decimal?        @db.Decimal(10, 2)
+  vitamin_b12                     Decimal?        @db.Decimal(10, 2)
+  vitamin_c                       Decimal?        @db.Decimal(10, 2)
+  sodium                          Decimal?        @db.Decimal(10, 2)
+  potassium                       Decimal?        @db.Decimal(10, 2)
+  calcium                         Decimal?        @db.Decimal(10, 2)
+  magnesium                       Decimal?        @db.Decimal(10, 2)
+  phosphorus                      Decimal?        @db.Decimal(10, 2)
+  sulfur                          Decimal?        @db.Decimal(10, 2)
+  chlorine                        Decimal?        @db.Decimal(10, 2)
+  iron                            Decimal?        @db.Decimal(10, 2)
+  zinc                            Decimal?        @db.Decimal(10, 2)
+  copper                          Decimal?        @db.Decimal(10, 2)
+  manganese                       Decimal?        @db.Decimal(10, 2)
+  fluorine                        Decimal?        @db.Decimal(10, 2)
+  iodine                          Decimal?        @db.Decimal(10, 2)
+  mannitol                        Decimal?        @db.Decimal(10, 2)
+  sorbitol                        Decimal?        @db.Decimal(10, 2)
+  xylitol                         Decimal?        @db.Decimal(10, 2)
+  all_sugar_alcohols              Decimal?        @db.Decimal(10, 2)
+  glucose                         Decimal?        @db.Decimal(10, 2)
+  fructose                        Decimal?        @db.Decimal(10, 2)
+  galactose                       Decimal?        @db.Decimal(10, 2)
+  monosaccharides                 Decimal?        @db.Decimal(10, 2)
+  sucrose                         Decimal?        @db.Decimal(10, 2)
+  maltose                         Decimal?        @db.Decimal(10, 2)
+  lactose                         Decimal?        @db.Decimal(10, 2)
+  disaccharides                   Decimal?        @db.Decimal(10, 2)
+  oligosaccharides_resorbable     Decimal?        @db.Decimal(10, 2)
+  oligosaccharides_non_resorbable Decimal?        @db.Decimal(10, 2)
+  glycogen                        Decimal?        @db.Decimal(10, 2)
+  starch                          Decimal?        @db.Decimal(10, 2)
+  polysaccharides                 Decimal?        @db.Decimal(10, 2)
+  poly_pentoses                   Decimal?        @db.Decimal(10, 2)
+  poly_hexoses                    Decimal?        @db.Decimal(10, 2)
+  poly_uronic_acids               Decimal?        @db.Decimal(10, 2)
+  cellulose                       Decimal?        @db.Decimal(10, 2)
+  lignin                          Decimal?        @db.Decimal(10, 2)
+  water_soluble_dietary_fiber     Decimal?        @db.Decimal(10, 2)
+  water_insoluble_dietary_fiber   Decimal?        @db.Decimal(10, 2)
+  isoleucine                      Decimal?        @db.Decimal(10, 2)
+  leucine                         Decimal?        @db.Decimal(10, 2)
+  lysine                          Decimal?        @db.Decimal(10, 2)
+  methionine                      Decimal?        @db.Decimal(10, 2)
+  cysteine                        Decimal?        @db.Decimal(10, 2)
+  phenylalanine                   Decimal?        @db.Decimal(10, 2)
+  tyrosine                        Decimal?        @db.Decimal(10, 2)
+  threonine                       Decimal?        @db.Decimal(10, 2)
+  tryptophan                      Decimal?        @db.Decimal(10, 2)
+  valine                          Decimal?        @db.Decimal(10, 2)
+  arginine                        Decimal?        @db.Decimal(10, 2)
+  histidine                       Decimal?        @db.Decimal(10, 2)
+  essential_amino_acids           Decimal?        @db.Decimal(10, 2)
+  alanine                         Decimal?        @db.Decimal(10, 2)
+  aspartic_acid                   Decimal?        @db.Decimal(10, 2)
+  glutamic_acid                   Decimal?        @db.Decimal(10, 2)
+  glycine                         Decimal?        @db.Decimal(10, 2)
+  proline                         Decimal?        @db.Decimal(10, 2)
+  serine                          Decimal?        @db.Decimal(10, 2)
+  non_essential_amino_acids       Decimal?        @db.Decimal(10, 2)
+  vegetable_protein               Decimal?        @db.Decimal(10, 2)
+  uric_acid                       Decimal?        @db.Decimal(10, 2)
+  purine_nitrogen                 Decimal?        @db.Decimal(10, 2)
+  butyric_acid                    Decimal?        @db.Decimal(10, 2)
+  capronic_acid                   Decimal?        @db.Decimal(10, 2)
+  caprylic_acid                   Decimal?        @db.Decimal(10, 2)
+  caprinic_acid                   Decimal?        @db.Decimal(10, 2)
+  lauric_acid                     Decimal?        @db.Decimal(10, 2)
+  myristic_acid                   Decimal?        @db.Decimal(10, 2)
+  pentadecanoic_acid              Decimal?        @db.Decimal(10, 2)
+  palmitic_acid                   Decimal?        @db.Decimal(10, 2)
+  margaric_acid                   Decimal?        @db.Decimal(10, 2)
+  stearic_acid                    Decimal?        @db.Decimal(10, 2)
+  arachidic_acid                  Decimal?        @db.Decimal(10, 2)
+  behenic_acid                    Decimal?        @db.Decimal(10, 2)
+  lignoceric_acid                 Decimal?        @db.Decimal(10, 2)
+  saturated_fatty_acids           Decimal?        @db.Decimal(10, 2)
+  tetradecenoic_acid              Decimal?        @db.Decimal(10, 2)
+  pentadecenoic_acid              Decimal?        @db.Decimal(10, 2)
+  palmitoleic_acid                Decimal?        @db.Decimal(10, 2)
+  heptadecenoic_acid              Decimal?        @db.Decimal(10, 2)
+  oleic_acid                      Decimal?        @db.Decimal(10, 2)
+  eicosenoic_acid                 Decimal?        @db.Decimal(10, 2)
+  erucic_acid                     Decimal?        @db.Decimal(10, 2)
+  selacholeic_acid                Decimal?        @db.Decimal(10, 2)
+  monounsaturated_fatty_acids     Decimal?        @db.Decimal(10, 2)
+  hexadecadienoic_acid            Decimal?        @db.Decimal(10, 2)
+  hexadecatetraenoic_acid         Decimal?        @db.Decimal(10, 2)
+  linoleic_acid                   Decimal?        @db.Decimal(10, 2)
+  linolenic_acid                  Decimal?        @db.Decimal(10, 2)
+  stearidonic_acid                Decimal?        @db.Decimal(10, 2)
+  nonadecatrienoic_acid           Decimal?        @db.Decimal(10, 2)
+  eicosadienoic_acid              Decimal?        @db.Decimal(10, 2)
+  eicosatrienoic_acid             Decimal?        @db.Decimal(10, 2)
+  arachidonic_acid                Decimal?        @db.Decimal(10, 2)
+  eicosapentaenoic_acid           Decimal?        @db.Decimal(10, 2)
+  docosadienoic_acid              Decimal?        @db.Decimal(10, 2)
+  docosatrienoic_acid             Decimal?        @db.Decimal(10, 2)
+  docosatetraenoic_acid           Decimal?        @db.Decimal(10, 2)
+  docosapentaenoic_acid           Decimal?        @db.Decimal(10, 2)
+  docosahexaenoic_acid            Decimal?        @db.Decimal(10, 2)
+  polyunsaturated_fatty_acids     Decimal?        @db.Decimal(10, 2)
+  short_chain_fatty_acids         Decimal?        @db.Decimal(10, 2)
+  medium_chain_fatty_acids        Decimal?        @db.Decimal(10, 2)
+  long_chain_fatty_acids          Decimal?        @db.Decimal(10, 2)
+  glycerol_and_lipoids            Decimal?        @db.Decimal(10, 2)
+  cholesterol                     Decimal?        @db.Decimal(10, 2)
+  bread_units                     Decimal?        @db.Decimal(10, 2)
+  nacl                            Decimal?        @db.Decimal(10, 2)
+  createdAt                       DateTime        @default(now())
+  updatedAt                       DateTime        @updatedAt
+
+  @@map("nutritions")
+}
